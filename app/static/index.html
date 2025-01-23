@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Search Page</title>
+  <script>
+    async function performSearch() {
+      const query = document.getElementById('searchBar').value;
+      if (!query) {
+        alert('Please enter a search query.');
+        return;
+      }
+
+      try {
+        const response = await fetch(`/search/${encodeURIComponent(query)}`);
+
+        if (!response.ok) {
+          throw new Error(`Error: ${response.status} ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        document.getElementById('results').textContent = JSON.stringify(data, null, 2);
+      } catch (error) {
+        document.getElementById('results').textContent = `Failed to fetch results: ${error.message}`;
+      }
+    }
+  </script>
+</head>
+
+<body>
+  <h1>Search Page</h1>
+  <input type="text" id="searchBar" placeholder="Enter your query">
+  <button onclick="performSearch()">Search</button>
+  <pre id="results" style="margin-top: 20px; background: #f4f4f4; padding: 10px; border: 1px solid #ddd;"></pre>
+</body>
+
+</html>
